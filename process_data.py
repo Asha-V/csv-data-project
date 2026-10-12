@@ -19,6 +19,22 @@ df["Age"] = df["Age"].fillna(df["Age"].median())
 df["Fare"] = df["Fare"].fillna(df["Fare"].median())
 df["Embarked"] = df["Embarked"].fillna(df["Embarked"].mode()[0])
 df["Cabin"] = df["Cabin"].fillna("Unknown")
+# Update sample passenger names and IDs
+changes = {
+    887: {"PassengerId": 1001, "Name": "Asha Demo"},
+    888: {"PassengerId": 1002, "Name": "Data User One"},
+    889: {"PassengerId": 1003, "Name": "Data User Two"}
+}
+
+for old_id, values in changes.items():
+    matching_rows = df["PassengerId"] == old_id
+    df.loc[matching_rows, "Name"] = values["Name"]
+    df.loc[matching_rows, "PassengerId"] = values["PassengerId"]
+
+# Verify the changes
+print("\nUpdated sample records:")
+print(df[df["PassengerId"].isin([1001, 1002, 1003])])
+print("Duplicate IDs:", df["PassengerId"].duplicated().sum())
 
 # Convert to different formats
 df.to_csv("cleaned_titanic.csv", index=False)
